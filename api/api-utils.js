@@ -65,6 +65,53 @@ function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
 
+function getSynonyms(word, callback) {
+    let url = apiUrls.URLS.BASE_URL+"/"+word+"/"+ apiUrls.URLS.SYNONYMS+"&api_key="+apiUrls.API_KEY;
+    getWordDataFrom(url, function (err, synonyms) {
+        if (err) {
+            callback(err);
+        }
+        else if (synonyms) {
+            if(Object.prototype.toString.call(synonyms).indexOf("Array")>-1){
+                if(synonyms.length !== 0){
+                    let synonymsArray = [];
+                    for(let index=0; index<synonyms.length; index++){
+                        if(synonyms[index]["relationshipType"] && synonyms[index]["relationshipType"] === "synonym"){
+                            if(synonyms[index]["words"]){
+                                synonymsArray = synonyms[index]["words"];
+                                break;
+                            }
+                        }
+                    }
+                    if(synonymsArray.length !== 0){
+                        callback(null,synonymsArray);
+                    }
+                    else{
+                        callback(null,null);
+                    }
+                }
+                else{
+                    callback(null,null);
+                }
+            }
+            else if(isApiKeyValid(synonyms)){
+                callback(errorCodes.INVALID_API_KEY);
+            }
+            else{
+                callback(errorCodes.INTERNAL_ERROR);
+            }
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
+
+
 apiUtils.getDefinitions = getDefinitions;
+
+apiUtils.getSynonyms = getSynonyms;
+
 
 module.exports = apiUtils;
