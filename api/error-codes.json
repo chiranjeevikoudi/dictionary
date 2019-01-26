@@ -4,7 +4,7 @@
     "message": "No Internet, please check your internet connection."
   },
   "INTERNAL_ERROR": {
-    "code": "NO_INTERNET",
+    "code": "INTERNAL_ERROR",
     "message": "some internal error occurred"
   },
   "INVALID_API_KEY": {
