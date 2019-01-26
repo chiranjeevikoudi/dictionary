@@ -239,6 +239,47 @@ function getWordDetails(word, callback) {
     });
 }
 
+function getWordOfTheDayDetails(callback) {
+    getWordOfTheDay(function (err, wordOfTheDay) {
+        if(err){
+            callback(err);
+        }
+        else if(wordOfTheDay){
+            async.parallel({
+                "definitions":function (cb) {
+                    getDefinitions(wordOfTheDay,cb);
+                },
+                "synonyms":function (cb) {
+                    getSynonyms(wordOfTheDay,cb);
+                },
+                "antonyms":function (cb) {
+                    getAntonyms(wordOfTheDay,cb);
+                },
+                "examples":function (cb) {
+                    getExamples(wordOfTheDay,cb);
+                }
+            },function (err,wordDetails) {
+                if(err){
+                    callback(err);
+                }
+                else{
+                    for(let property in wordDetails){
+                        if(wordDetails[property] === null){
+                            delete wordDetails[property];
+                        }
+                    }
+                    wordDetails["word"] = wordOfTheDay;
+                }
+                callback(err,wordDetails);
+            });
+
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
 function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
@@ -252,6 +293,7 @@ apiUtils.getAntonyms = getAntonyms;
 apiUtils.getExamples = getExamples;
 apiUtils.getWordOfTheDay = getWordOfTheDay;
 apiUtils.getWordDetails = getWordDetails;
+apiUtils.getWordOfTheDayDetails = getWordOfTheDayDetails;
 
 
 module.exports = apiUtils;
