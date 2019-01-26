@@ -306,6 +306,47 @@ function getRandomWord(callback) {
     });
 }
 
+function getRandomWordDetails(callback) {
+    getRandomWord(function (err, randomWord) {
+        if(err){
+            callback(err);
+        }
+        else if(randomWord){
+            async.parallel({
+                "definitions":function (cb) {
+                    getDefinitions(randomWord,cb);
+                },
+                "synonyms":function (cb) {
+                    getSynonyms(randomWord,cb);
+                },
+                "antonyms":function (cb) {
+                    getAntonyms(randomWord,cb);
+                },
+                "examples":function (cb) {
+                    getExamples(randomWord,cb);
+                }
+            },function (err,wordDetails) {
+                if(err){
+                    callback(err);
+                }
+                else{
+                    for(let property in wordDetails){
+                        if(wordDetails[property] === null){
+                            delete wordDetails[property];
+                        }
+                    }
+                    wordDetails["word"] = randomWord;
+                }
+                callback(err,wordDetails);
+            });
+
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
 function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
@@ -321,6 +362,7 @@ apiUtils.getWordOfTheDay = getWordOfTheDay;
 apiUtils.getWordDetails = getWordDetails;
 apiUtils.getWordOfTheDayDetails = getWordOfTheDayDetails;
 apiUtils.getRandomWord = getRandomWord;
+apiUtils.getRandomWordDetails = getRandomWordDetails;
 
 
 module.exports = apiUtils;
