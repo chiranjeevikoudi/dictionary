@@ -183,6 +183,32 @@ function getExamples(word, callback) {
     });
 }
 
+function getWordOfTheDay(callback) {
+    let url = apiUrls.URLS.BASE_URL+"/words.json/"+ apiUrls.URLS.WORD_OF_THE_DAY+"?api_key="+apiUrls.API_KEY;
+    getWordDataFrom(url, function (err, wordOfTheDay) {
+        if (err) {
+            callback(err);
+        }
+        else if (wordOfTheDay) {
+            if(Object.prototype.toString.call(wordOfTheDay).indexOf("Object")>-1 && wordOfTheDay.word){
+                callback(null,wordOfTheDay.word);
+            }
+            else if(Object.keys(wordOfTheDay).length === 0){
+                callback(null,null);
+            }
+            else if(isApiKeyValid(wordOfTheDay)){
+                callback(errorCodes.INVALID_API_KEY);
+            }
+            else{
+                callback(errorCodes.INTERNAL_ERROR);
+            }
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
 function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
@@ -194,6 +220,7 @@ apiUtils.getDefinitions = getDefinitions;
 apiUtils.getSynonyms = getSynonyms;
 apiUtils.getAntonyms = getAntonyms;
 apiUtils.getExamples = getExamples;
+apiUtils.getWordOfTheDay = getWordOfTheDay;
 
 
 module.exports = apiUtils;
