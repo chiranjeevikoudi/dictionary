@@ -43,20 +43,22 @@ function getDefinitions(word, callback) {
                 });
                 callback(null,definitions);
             }
-            else if(Object.prototype.toString.call(definitions).indexOf("Object")>-1 && definitions.message && definitions.message === "Invalid authentication credentials"){
+            else if(isApiKeyValid(definitions)){
                 callback(errorCodes.INVALID_API_KEY);
             }
             else{
                 callback(errorCodes.INTERNAL_ERROR);
             }
         }
-
         else{
             callback(null,null);
         }
     });
 }
 
+function isApiKeyValid(response) {
+    return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
+}
 
 apiUtils.getDefinitions = getDefinitions;
 
