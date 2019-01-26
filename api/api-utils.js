@@ -2,6 +2,7 @@ let request = require("request");
 let apiUrls = require("./api-urls");
 let errorCodes = require("./error-codes");
 let urlEncode = require('urlencode');
+let async = require("async");
 let apiUtils = {};
 
 function getWordDataFrom(url, callback) {
@@ -209,6 +210,35 @@ function getWordOfTheDay(callback) {
     });
 }
 
+function getWordDetails(word, callback) {
+    async.parallel({
+        "definitions":function (cb) {
+            getDefinitions(word,cb);
+        },
+        "synonyms":function (cb) {
+            getSynonyms(word,cb);
+        },
+        "antonyms":function (cb) {
+            getAntonyms(word,cb);
+        },
+        "examples":function (cb) {
+            getExamples(word,cb);
+        }
+    },function (err,wordDetails) {
+        if(err){
+            callback(err);
+        }
+        else{
+            for(let property in wordDetails){
+                if(wordDetails[property] === null){
+                    delete wordDetails[property];
+                }
+            }
+        }
+        callback(err,wordDetails);
+    });
+}
+
 function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
@@ -221,6 +251,7 @@ apiUtils.getSynonyms = getSynonyms;
 apiUtils.getAntonyms = getAntonyms;
 apiUtils.getExamples = getExamples;
 apiUtils.getWordOfTheDay = getWordOfTheDay;
+apiUtils.getWordDetails = getWordDetails;
 
 
 module.exports = apiUtils;
