@@ -280,6 +280,32 @@ function getWordOfTheDayDetails(callback) {
     });
 }
 
+function getRandomWord(callback) {
+    let url = apiUrls.URLS.BASE_URL+"/words.json/"+ apiUrls.URLS.RANDOM_WORD+"&api_key="+apiUrls.API_KEY;
+    getWordDataFrom(url, function (err, randomWord) {
+        if (err) {
+            callback(err);
+        }
+        else if (randomWord) {
+            if(Object.prototype.toString.call(randomWord).indexOf("Object")>-1 && randomWord.word){
+                callback(null,randomWord.word);
+            }
+            else if(Object.keys(randomWord).length === 0){
+                callback(null,null);
+            }
+            else if(isApiKeyValid(randomWord)){
+                callback(errorCodes.INVALID_API_KEY);
+            }
+            else{
+                callback(errorCodes.INTERNAL_ERROR);
+            }
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
 function isApiKeyValid(response) {
     return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
 }
@@ -294,6 +320,7 @@ apiUtils.getExamples = getExamples;
 apiUtils.getWordOfTheDay = getWordOfTheDay;
 apiUtils.getWordDetails = getWordDetails;
 apiUtils.getWordOfTheDayDetails = getWordOfTheDayDetails;
+apiUtils.getRandomWord = getRandomWord;
 
 
 module.exports = apiUtils;
