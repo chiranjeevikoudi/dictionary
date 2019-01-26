@@ -4,7 +4,8 @@
   "description": "provides the word meaning, synonyms, antonyms, examples and word of the day. you can play word game also.",
   "main": "index.js",
   "dependencies": {
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "urlencode": "^1.1.0"
   },
   "devDependencies": {},
   "scripts": {

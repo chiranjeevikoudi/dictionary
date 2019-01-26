@@ -1,6 +1,7 @@
 let request = require("request");
 let apiUrls = require("./api-urls");
 let errorCodes = require("./error-codes");
+let urlEncode = require('urlencode');
 let apiUtils = {};
 
 function getWordDataFrom(url, callback) {
@@ -28,7 +29,7 @@ function getWordDataFrom(url, callback) {
 }
 
 function getDefinitions(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+word+"/"+ apiUrls.URLS.DEFINITIONS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.DEFINITIONS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, definitions) {
         if (err) {
             callback(err);
@@ -61,12 +62,8 @@ function getDefinitions(word, callback) {
     });
 }
 
-function isApiKeyValid(response) {
-    return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
-}
-
 function getSynonyms(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+word+"/"+ apiUrls.URLS.SYNONYMS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.SYNONYMS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, synonyms) {
         if (err) {
             callback(err);
@@ -108,7 +105,7 @@ function getSynonyms(word, callback) {
 }
 
 function getAntonyms(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+word+"/"+ apiUrls.URLS.ANTONYMS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.ANTONYMS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, antonyms) {
         if (err) {
             callback(err);
@@ -149,12 +146,54 @@ function getAntonyms(word, callback) {
     });
 }
 
+function getExamples(word, callback) {
+    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.EXAMPLES+"&api_key="+apiUrls.API_KEY;
+    getWordDataFrom(url, function (err, examples) {
+        if (err) {
+            callback(err);
+        }
+        else if (examples) {
+            if(Object.prototype.toString.call(examples).indexOf("Object")>-1 && examples.examples && examples.examples.length !== 0){
+                let examplesArray = [];
+                for(let index=0; index<examples.examples.length; index++){
+                    if(examples.examples[index]["text"]){
+                        examplesArray.push(examples.examples[index]["text"]);
+                    }
+                }
+                if(examplesArray.length !== 0){
+                    callback(null,examplesArray);
+                }
+                else{
+                    callback(null,null);
+                }
+            }
+            else if(Object.keys(examples).length === 0){
+                callback(null,null);
+            }
+            else if(isApiKeyValid(examples)){
+                callback(errorCodes.INVALID_API_KEY);
+            }
+            else{
+                callback(errorCodes.INTERNAL_ERROR);
+            }
+        }
+        else{
+            callback(null,null);
+        }
+    });
+}
+
+function isApiKeyValid(response) {
+    return (Object.prototype.toString.call(response).indexOf("Object")>-1 && response.message && response.message === "Invalid authentication credentials")
+}
+
 
 
 
 apiUtils.getDefinitions = getDefinitions;
 apiUtils.getSynonyms = getSynonyms;
 apiUtils.getAntonyms = getAntonyms;
+apiUtils.getExamples = getExamples;
 
 
 module.exports = apiUtils;
