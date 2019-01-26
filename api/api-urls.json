@@ -1,7 +1,7 @@
 {
   "API_KEY":"YOUR_API_KEY",
   "URLS":{
-    "BASE_URL":"https://api.wordnik.com/v4/word.json",
+    "BASE_URL":"https://api.wordnik.com/v4",
     "DEFINITIONS":"definitions?limit=10&includeRelated=false&useCanonical=false&includeTags=false",
     "SYNONYMS":"relatedWords?useCanonical=false&limitPerRelationshipType=10",
     "ANTONYMS":"relatedWords?useCanonical=false&limitPerRelationshipType=10",
