@@ -35,13 +35,18 @@ function getDefinitions(word, callback) {
         }
         else if (definitions) {
             if(Object.prototype.toString.call(definitions).indexOf("Array")>-1){
-                definitions.forEach(function (definition,index) {
-                    definitions[index] = {
-                        "partOfSpeech": definition["partOfSpeech"],
-                        "text": definition["text"]
-                    };
-                });
-                callback(null,definitions);
+                if(definitions.length !== 0){
+                    definitions.forEach(function (definition,index) {
+                        definitions[index] = {
+                            "partOfSpeech": definition["partOfSpeech"],
+                            "text": definition["text"]
+                        };
+                    });
+                    callback(null,definitions);
+                }
+                else{
+                    callback(null,null);
+                }
             }
             else if(isApiKeyValid(definitions)){
                 callback(errorCodes.INVALID_API_KEY);
