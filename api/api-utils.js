@@ -29,7 +29,7 @@ function getWordDataFrom(url, callback) {
 }
 
 function getDefinitions(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.DEFINITIONS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/word.json/"+urlEncode(word)+"/"+ apiUrls.URLS.DEFINITIONS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, definitions) {
         if (err) {
             callback(err);
@@ -63,7 +63,7 @@ function getDefinitions(word, callback) {
 }
 
 function getSynonyms(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.SYNONYMS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/word.json/"+urlEncode(word)+"/"+ apiUrls.URLS.SYNONYMS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, synonyms) {
         if (err) {
             callback(err);
@@ -105,7 +105,7 @@ function getSynonyms(word, callback) {
 }
 
 function getAntonyms(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.ANTONYMS+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/word.json/"+urlEncode(word)+"/"+ apiUrls.URLS.ANTONYMS+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, antonyms) {
         if (err) {
             callback(err);
@@ -147,7 +147,7 @@ function getAntonyms(word, callback) {
 }
 
 function getExamples(word, callback) {
-    let url = apiUrls.URLS.BASE_URL+"/"+urlEncode(word)+"/"+ apiUrls.URLS.EXAMPLES+"&api_key="+apiUrls.API_KEY;
+    let url = apiUrls.URLS.BASE_URL+"/word.json/"+urlEncode(word)+"/"+ apiUrls.URLS.EXAMPLES+"&api_key="+apiUrls.API_KEY;
     getWordDataFrom(url, function (err, examples) {
         if (err) {
             callback(err);
