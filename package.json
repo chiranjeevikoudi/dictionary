@@ -1,0 +1,23 @@
+{
+  "name": "dictionary",
+  "version": "1.0.0",
+  "description": "provides the word meaning, synonyms, antonyms, examples and word of the day. you can play word game also.",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiranjeevikoudi/dictionary.git"
+  },
+  "author": "chiranjeevikoudi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chiranjeevikoudi/dictionary/issues"
+  },
+  "homepage": "https://github.com/chiranjeevikoudi/dictionary#readme"
+}
