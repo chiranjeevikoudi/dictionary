@@ -79,8 +79,8 @@ function getSynonyms(word, callback) {
                         if(synonyms[index]["relationshipType"] && synonyms[index]["relationshipType"] === "synonym"){
                             if(synonyms[index]["words"]){
                                 synonymsArray = synonyms[index]["words"];
-                                break;
                             }
+                            break;
                         }
                     }
                     if(synonymsArray.length !== 0){
