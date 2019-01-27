@@ -10,5 +10,9 @@
   "INVALID_API_KEY": {
     "code": "INVALID_API_KEY",
     "message": "api key you provided is invalid."
+  },
+  "INVALID_COMMAND": {
+    "code": "INVALID_COMMAND",
+    "message": "command is invalid."
   }
 }
