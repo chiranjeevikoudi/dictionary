@@ -228,14 +228,19 @@ function getWordDetails(word, callback) {
         if(err){
             callback(err);
         }
-        else{
+        else {
             for(let property in wordDetails){
                 if(wordDetails[property] === null){
                     delete wordDetails[property];
                 }
             }
         }
-        callback(err,wordDetails);
+        if(Object.keys(wordDetails).length !== 0){
+            callback(null,wordDetails);
+        }
+        else{
+            callback(null,null);
+        }
     });
 }
 
