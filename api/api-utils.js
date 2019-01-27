@@ -234,12 +234,12 @@ function getWordDetails(word, callback) {
                     delete wordDetails[property];
                 }
             }
-        }
-        if(Object.keys(wordDetails).length !== 0){
-            callback(null,wordDetails);
-        }
-        else{
-            callback(null,null);
+            if(Object.keys(wordDetails).length !== 0){
+                callback(null,wordDetails);
+            }
+            else{
+                callback(null,null);
+            }
         }
     });
 }
